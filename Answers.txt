@@ -1,0 +1,56 @@
+CSE233 – Assignment 2
+Full Explanation of Lab 5 Exercises + Linker & Loader
+
+Exercise 1 – Using fork() in C
+We wrote process_creation.c that uses the fork() system call. 
+When fork() is called, it creates a new child process. 
+- If fork() returns 0 → we are in the child process
+- If fork() returns >0 → we are in the parent and the number is the child's PID
+- Both processes print their own PID using getpid()
+This shows how a single program becomes two separate running processes.
+-----------------------------------------------------------------------------
+Exercise 2 – Starting Processes in the Background
+We used: sleep 300 &
+The "&" makes the command run in the background so the terminal stays free.
+Then we used: jobs
+This lists all background jobs and shows [1]+ Running sleep 300 &
+-----------------------------------------------------------------------------
+Exercise 3 – Stopping Processes
+We found the PID using: ps aux | grep sleep
+Then killed the process using: kill <PID>
+Finally verified it's gone with: ps aux | grep sleep (only shows the grep line)
+-----------------------------------------------------------------------------
+Exercise 4 – Pausing and Resuming a Process
+We started a long sleep: sleep 1000 &
+Then paused it with: kill -STOP <PID>
+Checked status with jobs (shows "Stopped")
+Then resumed with: kill -CONT <PID>
+jobs showed "Running" again
+-----------------------------------------------------------------------------
+Exercise 5 – Role of the Linker
+We created two files:
+file1.c → contains the hello() function
+file2.c → contains main() that calls hello() but doesn't define it
+Compiled with: gcc file1.c file2.c -o output_program
+The linker combined both files and resolved the call from file2.c to hello() in file1.c
+When we changed file1.c and recompiled, the new message appeared → proves the linker works
+-----------------------------------------------------------------------------
+Exercise 6 – Role of the Loader
+We wrote simple_program.c with just a printf
+Compiled it and ran: ldd simple_program
+This showed:
+- libc.so.6 → C library (provides printf)
+- ld-linux-x86-64.so.2 → the dynamic loader itself
+These libraries are loaded at runtime by the loader, not compiled into the program.
+-----------------------------------------------------------------------------
+Job of the Linker:
+The linker combines multiple object files (.o) into one executable file.
+It resolves function calls and variables between different files.
+Without the linker, file2.c wouldn't know where hello() is.
+-----------------------------------------------------------------------------
+Job of the Loader:
+The loader runs when we execute the program (./program).
+It loads the executable into memory and dynamically loads shared libraries (like libc.so.6) that the program needs at runtime.
+-----------------------------------------------------------------------------
+All exercises were done exactly as shown in Lab 5.
+Everything was tested on Ubuntu and works perfectly.
