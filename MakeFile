@@ -1,0 +1,23 @@
+all: process_creation linker_example loader_example
+
+process_creation: process_creation.c
+	gcc process_creation.c -o process_creation
+
+linker_example: file1.c file2.c
+	gcc file1.c file2.c -o linker_example
+
+loader_example: simple_program.c
+	gcc simple_program.c -o loader_example
+
+run:
+	@echo "All Lab 5 Examples"
+	@echo "1. fork() example:"
+	./process_creation
+	@echo "\n2. Linker example:"
+	./linker_example
+	@echo "\n3. Loader example:"
+	./loader_example
+	ldd loader_example
+
+clean:
+	rm -f process_creation linker_example loader_example
